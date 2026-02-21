@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure Data Engineering - LinkedIn Post</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: #0a0e1a;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    padding: 40px 20px;
+    min-height: 100vh;
+  }
+
+  /* ── CARD 1: Hero Announcement ── */
+  .card {
+    width: 1080px;
+    background: #0d1117;
+    border-radius: 24px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 40px 120px rgba(0,120,255,0.15);
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: -200px; right: -200px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,120,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -150px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(0,210,180,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero {
+    padding: 64px 72px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,120,255,0.1);
+    border: 1px solid rgba(0,120,255,0.3);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: #4d9fff;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+
+  .badge::before { content: '◆'; font-size: 8px; }
+
+  h1 {
+    font-size: 52px;
+    font-weight: 800;
+    line-height: 1.1;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+
+  h1 span {
+    background: linear-gradient(135deg, #0078ff, #00d4b4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    color: #8899aa;
+    font-weight: 300;
+    max-width: 600px;
+    line-height: 1.6;
+    margin-bottom: 48px;
+  }
+
+  .tech-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 48px;
+  }
+
+  .pill {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #ccd;
+    font-family: 'Space Mono', monospace;
+    transition: all 0.2s;
+  }
+
+  .pill.azure { border-color: rgba(0,120,255,0.4); color: #4d9fff; background: rgba(0,120,255,0.06); }
+  .pill.green { border-color: rgba(0,212,180,0.4); color: #00d4b4; background: rgba(0,212,180,0.06); }
+
+  .author-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0078ff, #00d4b4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .author-info .name { font-weight: 600; color: #fff; font-size: 15px; }
+  .author-info .role { font-size: 13px; color: #667788; }
+
+  /* ── CARD 2: Architecture ── */
+  .arch-card {
+    width: 1080px;
+    background: #0d1117;
+    border-radius: 24px;
+    padding: 64px 72px;
+    border: 1px solid #1e2a3a;
+    box-shadow: 0 40px 120px rgba(0,120,255,0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .arch-card::before {
+    content: '';
+    position: absolute;
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 300px;
+    background: radial-gradient(ellipse, rgba(0,120,255,0.07) 0%, transparent 70%);
+  }
+
+  .section-title {
+    font-size: 13px;
+    color: #4d9fff;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .arch-heading {
+    font-size: 36px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 48px;
+  }
+
+  .pipeline {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .pipeline-connector {
+    flex: 1;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(0,120,255,0.5), rgba(0,212,180,0.5));
+    position: relative;
+  }
+
+  .pipeline-connector::after {
+    content: '▶';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(0,212,180,0.6);
+    font-size: 12px;
+  }
+
+  .node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    min-width: 110px;
+  }
+
+  .node-icon {
+    width: 72px; height: 72px;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    position: relative;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .node-icon.blue { background: rgba(0,120,255,0.12); border-color: rgba(0,120,255,0.25); }
+  .node-icon.teal { background: rgba(0,212,180,0.1); border-color: rgba(0,212,180,0.2); }
+  .node-icon.purple { background: rgba(120,60,220,0.12); border-color: rgba(120,60,220,0.25); }
+  .node-icon.orange { background: rgba(255,140,0,0.1); border-color: rgba(255,140,0,0.2); }
+  .node-icon.yellow { background: rgba(255,200,0,0.1); border-color: rgba(255,200,0,0.2); }
+
+  .node-label {
+    text-align: center;
+  }
+
+  .node-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #ccd;
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 3px;
+  }
+
+  .node-desc {
+    font-size: 10px;
+    color: #556;
+    text-align: center;
+    line-height: 1.4;
+  }
+
+  /* Medallion layers */
+  .medallion {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .layer {
+    flex: 1;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    border: 1px solid;
+  }
+
+  .layer.bronze { background: rgba(180,90,20,0.08); border-color: rgba(180,90,20,0.3); }
+  .layer.silver { background: rgba(140,160,180,0.08); border-color: rgba(140,160,180,0.3); }
+  .layer.gold { background: rgba(220,180,0,0.08); border-color: rgba(220,180,0,0.3); }
+
+  .layer-name {
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .bronze .layer-name { color: #cd7f32; }
+  .silver .layer-name { color: #a0b0c0; }
+  .gold .layer-name { color: #ddb700; }
+
+  .layer-desc { font-size: 12px; color: #667; }
+
+  /* ── CARD 3: LinkedIn Post Text ── */
+  .post-card {
+    width: 1080px;
+    background: #fff;
+    border-radius: 24px;
+    padding: 64px 72px;
+    border: 1px solid #e8eaed;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  }
+
+  .post-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .li-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0078ff, #00d4b4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  .li-name { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .li-title { font-size: 13px; color: #667; }
+  .li-time { font-size: 12px; color: #999; margin-top: 2px; }
+
+  .post-body {
+    font-size: 15px;
+    line-height: 1.8;
+    color: #2c2c2c;
+    white-space: pre-line;
+  }
+
+  .post-body .emoji-line { font-size: 16px; }
+
+  .hashtags {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #0a66c2;
+    line-height: 2;
+  }
+
+  .li-actions {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+    padding-top: 20px;
+    border-top: 1px solid #e8eaed;
+  }
+
+  .li-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #667;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  /* Label */
+  .card-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: #4d9fff;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    opacity: 0.7;
+  }
+</style>
+</head>
+<body>
+
+<!-- CARD 1: Hero Banner -->
+<div class="card-label">📌 SCREENSHOT 1 — Share this as your project announcement banner</div>
+<div class="card">
+  <div class="hero">
+    <div class="badge">Azure Data Engineering Project</div>
+    <h1>Building a Real-Time<br><span>Sales Analytics Pipeline</span><br>on Microsoft Azure</h1>
+    <p class="subtitle">Implementing Medallion Architecture using ADF, ADLS Gen2, Databricks & Synapse Analytics — from raw data to business insights.</p>
+
+    <div class="tech-pills">
+      <span class="pill azure">Azure Data Factory</span>
+      <span class="pill azure">ADLS Gen2</span>
+      <span class="pill azure">Azure Databricks</span>
+      <span class="pill azure">Synapse Analytics</span>
+      <span class="pill green">PySpark</span>
+      <span class="pill green">Power BI</span>
+      <span class="pill green">Medallion Architecture</span>
+      <span class="pill">GitHub</span>
+    </div>
+
+    <div class="author-row">
+      <div class="avatar">AB</div>
+      <div class="author-info">
+        <div class="name">Abhijeet Bhaskar</div>
+        <div class="role">Data Engineering | Azure | PySpark | Python</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 2: Architecture Diagram -->
+<div class="card-label">📌 SCREENSHOT 2 — Architecture diagram to include in your post</div>
+<div class="arch-card">
+  <div class="section-title">Project Architecture</div>
+  <div class="arch-heading">End-to-End Data Pipeline</div>
+
+  <div class="pipeline">
+    <div class="node">
+      <div class="node-icon blue">📄</div>
+      <div class="node-label">
+        <div class="node-name">SOURCE</div>
+        <div class="node-desc">CSV / API<br>Raw Sales Data</div>
+      </div>
+    </div>
+
+    <div class="pipeline-connector"></div>
+
+    <div class="node">
+      <div class="node-icon blue">⚙️</div>
+      <div class="node-label">
+        <div class="node-name">ADF</div>
+        <div class="node-desc">Data Factory<br>Orchestration</div>
+      </div>
+    </div>
+
+    <div class="pipeline-connector"></div>
+
+    <div class="node">
+      <div class="node-icon teal">🗄️</div>
+      <div class="node-label">
+        <div class="node-name">ADLS Gen2</div>
+        <div class="node-desc">Data Lake<br>Storage</div>
+      </div>
+    </div>
+
+    <div class="pipeline-connector"></div>
+
+    <div class="node">
+      <div class="node-icon purple">⚡</div>
+      <div class="node-label">
+        <div class="node-name">Databricks</div>
+        <div class="node-desc">PySpark<br>Transform</div>
+      </div>
+    </div>
+
+    <div class="pipeline-connector"></div>
+
+    <div class="node">
+      <div class="node-icon orange">🏛️</div>
+      <div class="node-label">
+        <div class="node-name">Synapse</div>
+        <div class="node-desc">Analytics<br>Warehouse</div>
+      </div>
+    </div>
+
+    <div class="pipeline-connector"></div>
+
+    <div class="node">
+      <div class="node-icon yellow">📊</div>
+      <div class="node-label">
+        <div class="node-name">Power BI</div>
+        <div class="node-desc">Dashboard<br>& Insights</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="medallion">
+    <div class="layer bronze">
+      <div class="layer-name">🥉 Bronze</div>
+      <div class="layer-desc">Raw ingested data<br>as-is from source</div>
+    </div>
+    <div class="layer silver">
+      <div class="layer-name">🥈 Silver</div>
+      <div class="layer-desc">Cleaned, validated<br>& standardized data</div>
+    </div>
+    <div class="layer gold">
+      <div class="layer-name">🥇 Gold</div>
+      <div class="layer-desc">Aggregated, business-ready<br>analytics data</div>
+    </div>
+  </div>
+</div>
+
+<!-- CARD 3: LinkedIn Post Text -->
+<div class="card-label">📌 SCREENSHOT 3 — Copy this exact text for your LinkedIn post</div>
+<div class="post-card">
+  <div class="post-header">
+    <div class="li-avatar">AB</div>
+    <div>
+      <div class="li-name">Abhijeet Bhaskar</div>
+      <div class="li-title">Aspiring Data Engineer | Azure | Python | PySpark</div>
+      <div class="li-time">Just now · 🌐</div>
+    </div>
+  </div>
+
+  <div class="post-body">🚀 Excited to announce my new Azure Data Engineering Project!
+
+I'm building an end-to-end Real-Time Sales Analytics Pipeline on Microsoft Azure — and I'll be documenting every step of the journey right here on LinkedIn.
+
+🏗️ What I'm building:
+A complete data pipeline using the Medallion Architecture (Bronze → Silver → Gold) that ingests raw sales data, transforms it using PySpark, and delivers business insights via a Power BI dashboard.
+
+🛠️ Tech Stack:
+→ Azure Data Factory — for data ingestion & orchestration
+→ ADLS Gen2 — as the Data Lake (Bronze/Silver/Gold layers)
+→ Azure Databricks — for PySpark transformations
+→ Azure Synapse Analytics — as the data warehouse
+→ Power BI — for interactive dashboards
+
+💡 Why this project?
+This architecture is used by companies like Microsoft, Accenture, and Deloitte in production. Building this gives hands-on experience with the exact tools that data engineering teams use every day.
+
+📅 Timeline: 4 weeks | ☁️ Platform: Microsoft Azure
+
+I'll be posting weekly updates with screenshots, code snippets, and lessons learned.
+
+Follow along if you're interested in Data Engineering, Cloud, or Azure! 🙌
+
+GitHub link coming soon 👇</div>
+
+  <div class="hashtags">
+    #DataEngineering #Azure #AzureDataFactory #Databricks #PySpark #MicrosoftAzure #CloudComputing #DataPipeline #MedallionArchitecture #PowerBI #OpenToWork #LearningInPublic #DataAnalytics #BigData #TechIndia
+  </div>
+
+  <div class="li-actions">
+    <div class="li-btn">👍 Like</div>
+    <div class="li-btn">💬 Comment</div>
+    <div class="li-btn">🔁 Repost</div>
+    <div class="li-btn">📤 Send</div>
+  </div>
+</div>
+
+</body>
+</html>
