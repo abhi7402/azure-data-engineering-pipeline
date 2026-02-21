@@ -1,0 +1,70 @@
+{
+    "name": "adf-sales-pipeline-abhijeet",
+    "properties": {
+        "description": "Pipeline to ingest raw CSV sales data into ADLS Gen2 Bronze layer",
+        "activities": [
+            {
+                "name": "CopyRawSalesData",
+                "type": "Copy",
+                "inputs": [
+                    {
+                        "referenceName": "SourceCSVDataset",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "outputs": [
+                    {
+                        "referenceName": "BronzeADLSDataset",
+                        "type": "DatasetReference"
+                    }
+                ],
+                "typeProperties": {
+                    "source": {
+                        "type": "DelimitedTextSource",
+                        "storeSettings": {
+                            "type": "AzureBlobStorageReadSettings",
+                            "recursive": true
+                        }
+                    },
+                    "sink": {
+                        "type": "ParquetSink",
+                        "storeSettings": {
+                            "type": "AzureDataLakeStoreWriteSettings"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "TriggerDatabricksNotebook",
+                "type": "DatabricksNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "CopyRawSalesData",
+                        "dependencyConditions": ["Succeeded"]
+                    }
+                ],
+                "typeProperties": {
+                    "notebookPath": "/notebooks/bronze_ingestion",
+                    "baseParameters": {
+                        "storage_account": "adlsabhijeet2026",
+                        "layer": "bronze"
+                    }
+                }
+            }
+        ],
+        "triggers": [
+            {
+                "name": "DailyTrigger",
+                "type": "ScheduleTrigger",
+                "typeProperties": {
+                    "recurrence": {
+                        "frequency": "Day",
+                        "interval": 1,
+                        "startTime": "2026-01-01T00:00:00Z",
+                        "timeZone": "India Standard Time"
+                    }
+                }
+            }
+        ]
+    }
+}
